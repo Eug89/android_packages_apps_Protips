@@ -62,6 +62,9 @@ public class ProtipWidget extends AppWidgetProvider {
 
     private static final Pattern sNewlineRegex = Pattern.compile(" *\\n *");
     private static final Pattern sDrawableRegex = Pattern.compile(" *@(drawable/[a-z0-9_]+) *");
+    
+    // number of times you touch the droidman
+    public static int t=0;
 
     // initial appearance: eyes closed, no bubble
     private int mIconRes = R.drawable.droidman_open;
@@ -112,7 +115,6 @@ public class ProtipWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         setup(context);
-
         if (intent.getAction().equals(ACTION_NEXT_TIP)) {
             mMessage = getNextMessageIndex();
             SharedPreferences.Editor pref = context.getSharedPreferences(PREFS_NAME, 0).edit();
@@ -120,6 +122,16 @@ public class ProtipWidget extends AppWidgetProvider {
             pref.commit();
             refresh();
         } else if (intent.getAction().equals(ACTION_POKE)) {
+            t=t+1;
+            if (t==11){
+            goodmorning();
+            t=0;}
+            else if (t==10){
+            setIcon(R.drawable.droidman_down_closed);
+            mMessage = -1;
+            refresh();
+            }
+            else
             blink(intent.getIntExtra(EXTRA_TIMES, 1));
         } else if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_ENABLED)) {
             goodmorning();
